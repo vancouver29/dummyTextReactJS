@@ -28405,6 +28405,7 @@ var App = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
+      isLoading: true,
       paragraphs: 3,
       results: []
     };
@@ -28422,6 +28423,10 @@ var App = /*#__PURE__*/function (_Component) {
     value: function fetchText() {
       var _this2 = this;
 
+      // each time we make a request, isLoading turns true
+      this.setState({
+        isLoading: true
+      });
       var url = "https://baconipsum.com/api/?type=meat-and-filler&paras=" + this.state.paragraphs;
       fetch(url).then(function (response) {
         return response.json();
@@ -28429,7 +28434,8 @@ var App = /*#__PURE__*/function (_Component) {
         console.log(data);
 
         _this2.setState({
-          results: data
+          results: data,
+          isLoading: false
         });
       });
     } // setSate is asynchronous function, so after setState finished
@@ -28447,6 +28453,19 @@ var App = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "displayResults",
+    value: function displayResults() {
+      if (this.state.isLoading) {
+        return /*#__PURE__*/_react.default.createElement("p", null, " Loading... ");
+      } else {
+        return this.state.results.map(function (paragraphText, index) {
+          return /*#__PURE__*/_react.default.createElement("p", {
+            key: index
+          }, " ", paragraphText, " ");
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", {
@@ -28460,11 +28479,7 @@ var App = /*#__PURE__*/function (_Component) {
         onChange: this.handleChange
       }), " "), " "), " ", /*#__PURE__*/_react.default.createElement("h1", null, " Dummy Text Generator "), " ", /*#__PURE__*/_react.default.createElement("div", {
         id: "dummy-text-result"
-      }, " ", this.state.results.map(function (paragraphText, index) {
-        return /*#__PURE__*/_react.default.createElement("p", {
-          key: index
-        }, " ", paragraphText, " ");
-      }), " "), " ");
+      }, " ", this.displayResults(), " "), " ");
     }
   }]);
 

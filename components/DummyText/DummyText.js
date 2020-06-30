@@ -4,6 +4,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoading: true,
             paragraphs: 3,
             results: [],
         };
@@ -16,6 +17,9 @@ export default class App extends Component {
     }
 
     fetchText() {
+        // each time we make a request, isLoading turns true
+        this.setState({ isLoading: true });
+
         const url =
             "https://baconipsum.com/api/?type=meat-and-filler&paras=" +
             this.state.paragraphs;
@@ -23,7 +27,7 @@ export default class App extends Component {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                this.setState({ results: data });
+                this.setState({ results: data, isLoading: false });
             });
     }
 
@@ -33,6 +37,16 @@ export default class App extends Component {
         this.setState({ paragraphs: ev.target.value }, () => {
             this.fetchText();
         });
+    }
+
+    displayResults() {
+        if (this.state.isLoading) {
+            return <p > Loading... < /p>;
+        } else {
+            return this.state.results.map((paragraphText, index) => {
+                return <p key = { index } > { paragraphText } < /p>;
+            });
+        }
     }
 
     render() {
@@ -53,12 +67,7 @@ export default class App extends Component {
             /p> <
             /div> <
             h1 > Dummy Text Generator < /h1> <
-            div id = "dummy-text-result" > {
-                this.state.results.map((paragraphText, index) => {
-                    return <p key = { index } > { paragraphText } < /p>;
-                })
-            } <
-            /div> <
+            div id = "dummy-text-result" > { this.displayResults() } < /div> <
             /div>
         );
     }
