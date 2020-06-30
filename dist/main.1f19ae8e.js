@@ -28409,24 +28409,41 @@ var App = /*#__PURE__*/function (_Component) {
       results: []
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    var url = "https://baconipsum.com/api/?type=meat-and-filler&paras=" + _this.state.paragraphs;
-    fetch(url).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log(data);
-
-      _this.setState({
-        results: data
-      });
-    });
     return _this;
   }
 
   _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchText();
+    }
+  }, {
+    key: "fetchText",
+    value: function fetchText() {
+      var _this2 = this;
+
+      var url = "https://baconipsum.com/api/?type=meat-and-filler&paras=" + this.state.paragraphs;
+      fetch(url).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        console.log(data);
+
+        _this2.setState({
+          results: data
+        });
+      });
+    } // setSate is asynchronous function, so after setState finished
+    // the fetchText function can be called back
+
+  }, {
     key: "handleChange",
     value: function handleChange(ev) {
+      var _this3 = this;
+
       this.setState({
         paragraphs: ev.target.value
+      }, function () {
+        _this3.fetchText();
       });
     }
   }, {
@@ -28434,19 +28451,20 @@ var App = /*#__PURE__*/function (_Component) {
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", {
         id: "dummy-container"
-      }, /*#__PURE__*/_react.default.createElement("h1", null, " Dummy Text Generator "), " ", /*#__PURE__*/_react.default.createElement("div", {
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        id: "dummy-text-control"
+      }, /*#__PURE__*/_react.default.createElement("h2", null, " Real time Options: "), " ", /*#__PURE__*/_react.default.createElement("p", null, " Paragraphs: "), " ", /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement("input", {
+        min: "1",
+        type: "number",
+        value: this.state.paragraphs,
+        onChange: this.handleChange
+      }), " "), " "), " ", /*#__PURE__*/_react.default.createElement("h1", null, " Dummy Text Generator "), " ", /*#__PURE__*/_react.default.createElement("div", {
         id: "dummy-text-result"
       }, " ", this.state.results.map(function (paragraphText, index) {
         return /*#__PURE__*/_react.default.createElement("p", {
           key: index
         }, " ", paragraphText, " ");
-      }), " "), " ", /*#__PURE__*/_react.default.createElement("div", {
-        id: "dummy-text-control"
-      }, /*#__PURE__*/_react.default.createElement("h2", null, " Real time Options: "), " ", /*#__PURE__*/_react.default.createElement("p", null, " Paragraphs: "), " ", /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement("input", {
-        type: "number",
-        value: this.state.paragraphs,
-        onChange: this.handleChange
-      }), " "), " "), " ");
+      }), " "), " ");
     }
   }]);
 
@@ -28560,7 +28578,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55844" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56878" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -9,7 +9,13 @@ export default class App extends Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+    }
 
+    componentDidMount() {
+        this.fetchText();
+    }
+
+    fetchText() {
         const url =
             "https://baconipsum.com/api/?type=meat-and-filler&paras=" +
             this.state.paragraphs;
@@ -21,32 +27,37 @@ export default class App extends Component {
             });
     }
 
+    // setSate is asynchronous function, so after setState finished
+    // the fetchText function can be called back
     handleChange(ev) {
-        this.setState({ paragraphs: ev.target.value });
+        this.setState({ paragraphs: ev.target.value }, () => {
+            this.fetchText();
+        });
     }
 
     render() {
         return ( <
             div id = "dummy-container" >
             <
-            h1 > Dummy Text Generator < /h1> <
-            div id = "dummy-text-result" > {
-                this.state.results.map((paragraphText, index) => {
-                    return <p key = { index } > { paragraphText } < /p>;
-                })
-            } <
-            /div> <
             div id = "dummy-text-control" >
             <
             h2 > Real time Options: < /h2> <
             p > Paragraphs: < /p> <
             p >
             <
-            input type = "number"
+            input min = "1"
+            type = "number"
             value = { this.state.paragraphs }
             onChange = { this.handleChange }
             /> <
             /p> <
+            /div> <
+            h1 > Dummy Text Generator < /h1> <
+            div id = "dummy-text-result" > {
+                this.state.results.map((paragraphText, index) => {
+                    return <p key = { index } > { paragraphText } < /p>;
+                })
+            } <
             /div> <
             /div>
         );
