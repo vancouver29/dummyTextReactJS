@@ -28405,9 +28405,20 @@ var App = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      paragraphs: 5
+      paragraphs: 3,
+      results: []
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    var url = "https://baconipsum.com/api/?type=meat-and-filler&paras=" + _this.state.paragraphs;
+    fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log(data);
+
+      _this.setState({
+        results: data
+      });
+    });
     return _this;
   }
 
@@ -28425,7 +28436,11 @@ var App = /*#__PURE__*/function (_Component) {
         id: "dummy-container"
       }, /*#__PURE__*/_react.default.createElement("h1", null, " Dummy Text Generator "), " ", /*#__PURE__*/_react.default.createElement("div", {
         id: "dummy-text-result"
-      }, " "), " ", /*#__PURE__*/_react.default.createElement("div", {
+      }, " ", this.state.results.map(function (paragraphText, index) {
+        return /*#__PURE__*/_react.default.createElement("p", {
+          key: index
+        }, " ", paragraphText, " ");
+      }), " "), " ", /*#__PURE__*/_react.default.createElement("div", {
         id: "dummy-text-control"
       }, /*#__PURE__*/_react.default.createElement("h2", null, " Real time Options: "), " ", /*#__PURE__*/_react.default.createElement("p", null, " Paragraphs: "), " ", /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement("input", {
         type: "number",
